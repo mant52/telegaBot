@@ -14,17 +14,17 @@ import plotly
 import plotly.plotly as py
 from transliterate import translit, get_available_language_codes
 
-def database_connection():
-    try:
-        connection = psycopg2.connect("dbname='spreadsheets' user='antonmelbardis' host='localhost'")
-    except:
-        print ("I am unable to connect to the database")
-
-    connection.set_session(autocommit=True)
-    return connection
-
-db = database_connection()
-cur = db.cursor()
+# def database_connection():
+#     try:
+#         connection = psycopg2.connect("dbname='spreadsheets' user='antonmelbardis' host='localhost'")
+#     except:
+#         print ("I am unable to connect to the database")
+#
+#     connection.set_session(autocommit=True)
+#     return connection
+#
+# db = database_connection()
+# cur = db.cursor()
 
 def handle(msg):
 
