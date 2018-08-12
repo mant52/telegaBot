@@ -39,9 +39,10 @@ def handle(msg):
         print('photo nah')
         bot.download_file(msg['photo'][-1]['file_id'], './file.png')
         filename = str(uuid.uuid4().hex)
-        key = str(chat_id) + '/' + str(user_id) + '/' + filename[0:5] + '.jpg'
+        key = str(chat_id) + '/' + str(user_id) + '/' + filename + '.jpg'
         photo = open('file.png', 'rb')
         s3.Bucket(bucket).put_object(Key=key, Body=photo, ACL='public-read', ContentType= 'image/jpeg')
+        logImages(msg)
 
     # only log the stuff posted on channels
     if 'title' in msg['chat']:
@@ -117,6 +118,7 @@ def get_wind_direction(wind):
         wind = 'North'
     return wind
 
+
 def logGroups(msg):
     try:
         text_to_log = msg['text']
@@ -130,6 +132,22 @@ def logGroups(msg):
         INSERT INTO logs (userid, first_name, chatid, chat_title, date, text)
         VALUES (%s, %s, %s, %s, %s, %s);
         """, (user_id, first_name, chat_id, chat_title, message_date, text_to_log))
+    except KeyError:
+        print ('non-text message')
+
+def logImages(msg):
+    try:
+        image_url = msg['text']
+        user_id = msg['from']['id']
+        first_name = msg['from']['first_name']
+        chat_id = msg['chat']['id']
+        chat_title = msg['chat']['title']
+        message_date = msg['date']
+        # SQL to log the message
+        cur.execute("""
+        INSERT INTO images (userid, first_name, chatid, chat_title, date, image_url)
+        VALUES (%s, %s, %s, %s, %s, %s);
+        """, (user_id, first_name, chat_id, chat_title, message_date, image_url))
     except KeyError:
         print ('non-text message')
 
