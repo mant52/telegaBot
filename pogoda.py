@@ -120,7 +120,7 @@ def get_logs_on_user(msg):
     first_name = msg['from']['first_name']
 
     sql = "SELECT count(*) from logs WHERE chatid = '%s' AND userid = '%s';" % (chat_id, user_id)
-    print(sql)
+    # print(sql)
     cur.execute(sql)
     results = cur.fetchone()
     return first_name + ' тут нахуячил ' + str(results[0]) + ' сообщений'
