@@ -8,6 +8,9 @@ from telepot.loop import MessageLoop
 from gtts import gTTS
 import psycopg2
 from urllib.request import urlretrieve
+import hashlib
+import uuid
+
 
 s3 = boto3.resource('s3')
 bucket= 'telega-bot-files'
@@ -30,12 +33,15 @@ cur = db.cursor()
 def handle(msg):
 
     content_type, chat_type, chat_id = telepot.glance(msg)
+    user_id = msg['from']['id']
     print(telepot.glance(msg))
     if content_type == 'photo':
         print('photo nah')
         bot.download_file(msg['photo'][-1]['file_id'], './file.png')
+        filename = uuid.uuid4().hex
+        key = chat_id + '/' + user_id + '/' + filename + 'jpg'
         photo = open('file.png', 'rb')
-        s3.Bucket(bucket).put_object(Key='file.png', Body=photo, ACL='public-read', ContentType= 'image/jpeg')
+        s3.Bucket(bucket).put_object(Key=key, Body=photo, ACL='public-read', ContentType= 'image/jpeg')
 
     # only log the stuff posted on channels
     if 'title' in msg['chat']:
