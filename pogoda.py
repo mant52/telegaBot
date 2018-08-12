@@ -25,6 +25,7 @@ cur = db.cursor()
 def handle(msg):
 
     content_type, chat_type, chat_id = telepot.glance(msg)
+    print(content_type)
     if content_type == 'photo':
         print('photo nah')
         bot.download_file(msg['photo'][-1]['file_id'], './file.png')
