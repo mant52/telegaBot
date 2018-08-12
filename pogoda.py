@@ -6,13 +6,7 @@ import math
 from telepot.loop import MessageLoop
 from gtts import gTTS
 import psycopg2
-from selenium import webdriver
-from PIL import Image
 from urllib.request import urlretrieve
-import plotly.graph_objs as go
-import plotly
-import plotly.plotly as py
-
 
 def database_connection():
     try:
@@ -52,10 +46,6 @@ def handle(msg):
 
         if command =='/pogodka':
             bot.sendMessage(chat_id, get_weather(text))
-        elif command =='/league':
-            get_screenshot(text)
-            f = open('test.png', 'rb')
-            bot.sendPhoto(chat_id, f)
         elif command == '/sendaudio':
             send_audio(text)
             f = open('voice.mp3', 'rb')  # some file on local disk
@@ -63,10 +53,6 @@ def handle(msg):
         elif command == '/nagovoril':
             get_logs_on_user(msg)
             bot.sendMessage(chat_id, get_logs_on_user(msg))
-        elif command == '/users':
-            get_all_users(msg)
-            f = open('pie.png', 'rb')
-            bot.sendPhoto(chat_id, f)
 
     else:
         print('Lol')
@@ -87,45 +73,6 @@ def get_weather(city):
         return weather
     except:
         return 'No weather data available for ' + city + '. Try another city.'
-
-def get_screenshot(text):
-    print (text)
-    driver = webdriver.PhantomJS()
-    text = text.lower()
-    driver.set_window_size(1024, 768) # set the window size that you need
-    if text == 'england':
-        driver.get('http://www.skysports.com/premier-league-table')
-        driver.save_screenshot('england.png')
-        img = Image.open("england.png")
-        img2 = img.crop((15, 536, 656, 1503))
-        img2.save('test.png')
-    elif text == 'germany':
-        driver.get('http://www.skysports.com/bundesliga-table')
-        driver.save_screenshot('germany.png')
-        img = Image.open("germany.png")
-        img2 = img.crop((15, 536, 656, 1413))
-        img2.save('test.png')
-    elif text == 'spain':
-        driver.get('http://www.skysports.com/la-liga-table')
-        driver.save_screenshot('spain.png')
-        img = Image.open("spain.png")
-        img2 = img.crop((15, 536, 656, 1503))
-        img2.save('test.png')
-    elif text == 'france':
-        driver.get('http://www.skysports.com/ligue-1-table')
-        driver.save_screenshot('france.png')
-        img = Image.open("france.png")
-        img2 = img.crop((15, 536, 656, 1503))
-        img2.save('test.png')
-    elif text == 'italy':
-        driver.get('http://www.skysports.com/serie-a-table')
-        driver.save_screenshot('italy.png')
-        img = Image.open("italy.png")
-        img2 = img.crop((15, 536, 656, 1503))
-        img2.save('test.png')
-    else:
-        url = "https://www.vladtime.ru/uploads/posts/2018-01/thumbs/1516963715_24296312.jpg.770x380_q85_crop-0.jpg"
-        urlretrieve(url, "test.png")
 
 def send_audio(text):
     lang = text.split(' ', 1)[0]
@@ -177,33 +124,6 @@ def get_logs_on_user(msg):
     cur.execute(sql)
     results = cur.fetchone()
     return first_name + ' тут нахуячил ' + str(results[0]) + ' сообщений'
-
-def get_all_users(msg):
-    chat_id = msg['chat']['id']
-
-    sql = "SELECT DISTINCT first_name FROM logs where chatid = '%s'" % (chat_id)
-    cur.execute(sql)
-    results = cur.fetchall()
-
-    stats = []
-    users = []
-
-    for row in results:
-        print(row[0])
-        sql = "SELECT count(*) from logs WHERE chatid = '%s' AND first_name = '%s';" % (chat_id, row[0])
-        cur.execute(sql)
-        users.append(row[0])
-        result = cur.fetchone()
-        stats.append(result[0])
-
-    trace = go.Pie(
-        labels = users,
-        values = stats,
-    )
-
-    data = [trace]
-    py.image.save_as({'data':data}, 'pie', format='png')
-
 
 while 1:
     time.sleep(10)
