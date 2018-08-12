@@ -154,13 +154,11 @@ def get_wind_direction(wind):
 def logGroups(msg):
     try:
         text_to_log = msg['text']
-        spell_checker(msg)
         user_id = msg['from']['id']
         first_name = msg['from']['first_name']
         chat_id = msg['chat']['id']
         chat_title = msg['chat']['title']
         message_date = msg['date']
-        print(translit(text_to_log, 'ru'))
         # SQL to log the message
         cur.execute("""
         INSERT INTO logs (userid, first_name, chatid, chat_title, date, text)
