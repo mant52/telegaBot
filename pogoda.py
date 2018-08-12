@@ -38,7 +38,7 @@ def handle(msg):
     if content_type == 'photo':
         print('photo nah')
         bot.download_file(msg['photo'][-1]['file_id'], './file.png')
-        filename = uuid.uuid4().hex
+        filename = str(uuid.uuid4().hex)
         key = chat_id + '/' + user_id + '/' + filename + 'jpg'
         photo = open('file.png', 'rb')
         s3.Bucket(bucket).put_object(Key=key, Body=photo, ACL='public-read', ContentType= 'image/jpeg')
