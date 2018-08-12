@@ -154,11 +154,13 @@ def get_wind_direction(wind):
 def logGroups(msg):
     try:
         text_to_log = msg['text']
+        spell_checker(msg)
         user_id = msg['from']['id']
         first_name = msg['from']['first_name']
         chat_id = msg['chat']['id']
         chat_title = msg['chat']['title']
         message_date = msg['date']
+        print(translit(text_to_log, 'ru'))
         # SQL to log the message
         cur.execute("""
         INSERT INTO logs (userid, first_name, chatid, chat_title, date, text)
@@ -173,8 +175,10 @@ def get_logs_on_user(msg):
     first_name = msg['from']['first_name']
 
     sql = "SELECT count(*) from logs WHERE chatid = '%s' AND userid = '%s';" % (chat_id, user_id)
+    print(sql)
     cur.execute(sql)
     results = cur.fetchone()
+    return first_name + ' тут нахуячил ' + str(results[0]) + ' сообщений'
 
 def get_all_users(msg):
     chat_id = msg['chat']['id']
@@ -201,6 +205,7 @@ def get_all_users(msg):
 
     data = [trace]
     py.image.save_as({'data':data}, 'pie', format='png')
+
 
 while 1:
     time.sleep(10)
