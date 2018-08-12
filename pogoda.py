@@ -39,7 +39,7 @@ def handle(msg):
         print('photo nah')
         bot.download_file(msg['photo'][-1]['file_id'], './file.png')
         filename = str(uuid.uuid4().hex)
-        key = str(chat_id) + '/' + str(user_id) + '/' + filename + '.jpg'
+        key = str(chat_id) + '/' + str(user_id) + '/' + filename[0:5] + '.jpg'
         photo = open('file.png', 'rb')
         s3.Bucket(bucket).put_object(Key=key, Body=photo, ACL='public-read', ContentType= 'image/jpeg')
 
