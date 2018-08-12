@@ -12,11 +12,13 @@ from urllib.request import urlretrieve
 import plotly.graph_objs as go
 import plotly
 import plotly.plotly as py
-from transliterate import translit, get_available_language_codes
+
 
 def database_connection():
     try:
-        connection = psycopg2.connect("dbname='spreadsheets' user='antonmelbardis' host='localhost'")
+        # connection = psycopg2.connect("dbname='spreadsheets' user='antonmelbardis' host='localhost'")
+        connection = psycopg2.connect(database='logs', user='mant', password="ninjas52",
+        host='telegabotlogs.cpkdiexltofo.eu-west-1.rds.amazonaws.com', port='5432')
     except:
         print ("I am unable to connect to the database")
 
@@ -157,7 +159,6 @@ def logGroups(msg):
         chat_id = msg['chat']['id']
         chat_title = msg['chat']['title']
         message_date = msg['date']
-        print(translit(text_to_log, 'ru'))
         # SQL to log the message
         cur.execute("""
         INSERT INTO logs (userid, first_name, chatid, chat_title, date, text)
@@ -172,10 +173,8 @@ def get_logs_on_user(msg):
     first_name = msg['from']['first_name']
 
     sql = "SELECT count(*) from logs WHERE chatid = '%s' AND userid = '%s';" % (chat_id, user_id)
-    print(sql)
     cur.execute(sql)
     results = cur.fetchone()
-    # return first_name + ' тут нахуячил ' + str(results[0]) + ' сообщений'
 
 def get_all_users(msg):
     chat_id = msg['chat']['id']
