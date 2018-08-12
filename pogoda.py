@@ -42,7 +42,7 @@ def handle(msg):
         key = str(chat_id) + '/' + str(user_id) + '/' + filename + '.jpg'
         photo = open('file.png', 'rb')
         s3.Bucket(bucket).put_object(Key=key, Body=photo, ACL='public-read', ContentType= 'image/jpeg')
-        logImages(msg)
+        logImages(msg, key)
 
     # only log the stuff posted on channels
     if 'title' in msg['chat']:
@@ -135,10 +135,10 @@ def logGroups(msg):
     except KeyError:
         print ('non-text message')
 
-def logImages(msg):
+def logImages(msg, key):
     try:
         print('getting here?')
-        image_url = msg['text']
+        image_url = key
         user_id = msg['from']['id']
         first_name = msg['from']['first_name']
         chat_id = msg['chat']['id']
