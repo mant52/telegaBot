@@ -42,7 +42,7 @@ def handle(msg):
         else:
             command = query
 
-        print ('Got command: %s' % command)
+        # print ('Got command: %s' % command)
 
         if command =='/pogodka':
             bot.sendMessage(chat_id, get_weather(text))
@@ -51,7 +51,7 @@ def handle(msg):
             f = open('voice.mp3', 'rb')  # some file on local disk
             bot.sendVoice(chat_id, f)
         elif command == '/nagovoril':
-            get_logs_on_user(msg)
+            # get_logs_on_user(msg)
             bot.sendMessage(chat_id, get_logs_on_user(msg))
 
     else:
