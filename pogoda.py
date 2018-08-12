@@ -137,6 +137,7 @@ def logGroups(msg):
 
 def logImages(msg):
     try:
+        print('getting here?')
         image_url = msg['text']
         user_id = msg['from']['id']
         first_name = msg['from']['first_name']
