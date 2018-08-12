@@ -3,10 +3,15 @@ import telepot
 import requests
 import json
 import math
+import boto3
 from telepot.loop import MessageLoop
 from gtts import gTTS
 import psycopg2
 from urllib.request import urlretrieve
+
+s3 = boto3.resource('s3')
+bucket= 'telega-bot-files'
+
 
 def database_connection():
     try:
@@ -29,6 +34,8 @@ def handle(msg):
     if content_type == 'photo':
         print('photo nah')
         bot.download_file(msg['photo'][-1]['file_id'], './file.png')
+        photo = open('file.png', 'rb')
+        s3.Bucket(bucket).put_object(Key='file.png', Body=photo, ACL='public-read', ContentType= 'image/jpeg')
 
     # only log the stuff posted on channels
     if 'title' in msg['chat']:
