@@ -26,6 +26,7 @@ def handle(msg):
 
     content_type, chat_type, chat_id = telepot.glance(msg)
     if content_type == 'photo':
+        print('photo nah')
         bot.download_file(msg['photo'][-1]['file_id'], './file.png')
 
     # only log the stuff posted on channels
