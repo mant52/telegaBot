@@ -18,9 +18,8 @@ bucket= 'telega-bot-files'
 
 def database_connection():
     try:
-        # connection = psycopg2.connect("dbname='spreadsheets' user='antonmelbardis' host='localhost'")
-        connection = psycopg2.connect(database='logs', user='mant', password="ninjas52",
-        host='telegabotlogs.cpkdiexltofo.eu-west-1.rds.amazonaws.com', port='5432')
+        connection = psycopg2.connect(database='dbname', user='username', password="password",
+        host='xxx.amazonaws.com', port='5432')
     except:
         print ("I am unable to connect to the database")
 
@@ -77,7 +76,7 @@ def handle(msg):
     else:
         print('Lol')
 
-bot = telepot.Bot('535668550:AAEHj47Ui_MNz3-emYJSOvZDuVt7cZk_0Gw')
+bot = telepot.Bot('telegramAPIKey')
 
 MessageLoop(bot, handle).run_as_thread()
 print ('I am listening ...')
